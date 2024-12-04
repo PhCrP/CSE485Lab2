@@ -7,7 +7,7 @@ class News {
     }
 
     public function getAllNews() {
-        $result = $this->db->query("SELECT news.*, categories.name AS category_name FROM news INNER JOIN categories ON news.category_id = categories.id");
+        $result = $this->db->query("SELECT * FROM news;");
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 

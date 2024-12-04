@@ -22,3 +22,11 @@ CREATE TABLE news (
     category_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+insert into categories(name)
+VALUES ("one");
+
+insert into news(title, content, image, category_id)
+VALUES ("t1", "this is t1", "ass.jpg", 1);
+
+SELECT * FROM news;
