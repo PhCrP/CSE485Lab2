@@ -22,3 +22,6 @@ CREATE TABLE news (
     category_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- Thêm tài khoản quản trị viên mẫu
+INSERT INTO users (username, password, role) VALUES ('admin', MD5(' '), 1);
