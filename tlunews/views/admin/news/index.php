@@ -1,9 +1,3 @@
-<?php
-include "./models/News.php";
-$newsModel = new News();
-$newsList = $newsModel->getAllNews();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,7 +10,7 @@ $newsList = $newsModel->getAllNews();
 <body>
 
     <h1>Danh sách tin tức</h1>
-    <a href="../news/add.php">Thêm mới tin tức</a>
+    <a href="<?= DOMAIN."views/admin/news/add.php" ?>">Thêm mới tin tức</a>
     <table>
         <thead>
             <tr>
