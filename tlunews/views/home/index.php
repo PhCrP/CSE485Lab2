@@ -23,7 +23,7 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>Tiêu đề</th>
                 <th>Chuyên mục</th>
                 <th>Hành động</th>
@@ -32,12 +32,12 @@
         <tbody>
             <?php foreach ($newsList as $news): ?>
                 <tr>
-                    <td><?php echo $news['id']; ?></td>
+                    <!-- <td><?php echo $news['id']; ?></td> -->
                     <td><?php echo $news['title']; ?></td>
                     <!-- <td><?php echo $news['category_name']; ?></td> -->
                     <td>
-                        <a href="index.php?controller=news&action=edit&id=<?php echo $news['id']; ?>">Sửa</a>
-                        <a href="index.php?controller=news&action=delete&id=<?php echo $news['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
+                        <a href="index.php?controller=news&action=edit&id=<?= $news['id']; ?>">Sửa</a>
+                        <a href="index.php?controller=news&action=delete&id=<? $news['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

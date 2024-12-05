@@ -1,3 +1,12 @@
+<?php
+
+    require_once APP_ROOT."/servers/newsServer.php";
+    $new = new newsServer();
+    $newsList = $new->getAllNews();
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +23,7 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>Tiêu đề</th>
                 <th>Chuyên mục</th>
                 <th>Hành động</th>
@@ -23,7 +32,7 @@
         <tbody>
             <?php foreach ($newsList as $news): ?>
                 <tr>
-                    <td><?php echo $news['id']; ?></td>
+                    <!-- <td><?php echo $news['id']; ?></td> -->
                     <td><?php echo $news['title']; ?></td>
                     <!-- <td><?php echo $news['category_name']; ?></td> -->
                     <td>
