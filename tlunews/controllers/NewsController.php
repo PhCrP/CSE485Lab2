@@ -1,7 +1,10 @@
 <?php
+
+require_once APP_ROOT."/servers/newsServer.php";
+
 class NewsController {
     public function index() {
-        $newsModel = new News();
+        $newsModel = new newsServer();
         $newsList = $newsModel->getAllNews();
         include "views/admin/news/index.php";
     }
@@ -9,7 +12,7 @@ class NewsController {
     public function detail() {
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         if ($id) {
-            $newsModel = new News();
+            $newsModel = new newsServer();
             $news = $newsModel->getNewsById($id);
             include "views/news/detail.php";
         } else {
@@ -24,7 +27,7 @@ class NewsController {
             $image = $_POST['image']; 
             $category_id = $_POST['category_id'];
 
-            $newsModel = new News();
+            $newsModel = new newsServer();
             $newsModel->createNews($title, $content, $image, $category_id);
             header("Location: index.php");
         }
@@ -37,7 +40,7 @@ class NewsController {
     public function edit() {
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         if ($id) {
-            $newsModel = new News();
+            $newsModel = new newsServer();
             $news = $newsModel->getNewsById($id);
         }
 
@@ -45,9 +48,9 @@ class NewsController {
             $title = $_POST['title'];
             $content = $_POST['content'];
             $image = $_POST['image']; 
-            $category_id = $_POST['category_id'];
+            $idNews = $_POST['id'];
 
-            $newsModel->updateNews($id, $title, $content, $image, $category_id);
+            $newsModel->updateNews($title, $content, $image, $idNews);
             header("Location: index.php");
         }
 
@@ -59,7 +62,7 @@ class NewsController {
     public function delete() {
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         if ($id) {
-            $newsModel = new News();
+            $newsModel = new newsServer();
             $newsModel->deleteNews($id);
             header("Location: index.php");
         } else {

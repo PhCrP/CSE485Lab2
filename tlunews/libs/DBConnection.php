@@ -18,9 +18,8 @@ class DBConnection
         $this->DB_port = port;
 
         try {
-            $conn = new PDO("mysql:host={$this->DB_host}};dbname={$this->DB_daba}", $this->DB_user, $this->DB_pass, [$this->DB_port]);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            echo"skjdfbgujhsdbgjn";
+            $this->conn = new PDO("mysql:host={$this->DB_host};dbname={$this->DB_daba}", $this->DB_user, $this->DB_pass, [$this->DB_port]);
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo "Lỗi: " . $e->getMessage() . "<br>";
         }
