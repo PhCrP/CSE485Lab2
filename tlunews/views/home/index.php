@@ -1,8 +1,19 @@
 <?php
 
-    require_once APP_ROOT."/servers/newsServer.php";
-    $new = new newsServer();
-    $newsList = $new->getAllNews();
+require_once APP_ROOT . "/servers/newsServer.php";
+require_once APP_ROOT . "/controllers/NewsController.php";
+$new = new newsServer();
+$newsList = $new->getAllNews();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST['delete'])) {
+        $id = intval($_POST['id']);
+        $newsModel = new newsServer();
+        $newsModel->deleteNews($id);
+    } else {
+        echo "Bài viết không tồn tại.";
+    }
+}
 
 ?>
 
@@ -23,24 +34,30 @@
     <table>
         <thead>
             <tr>
-                <!-- <th>ID</th> -->
-                <th>Tiêu đề</th>
-                <th>Chuyên mục</th>
-                <th>Hành động</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Update</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($newsList as $news): ?>
+            <?php $i = 1;
+            foreach ($newsList as $news): ?>
                 <tr>
-                    <!-- <td><?php echo $news['id']; ?></td> -->
+                    <td><?= $i; ?></td>
                     <td><?php echo $news['title']; ?></td>
-                    <!-- <td><?php echo $news['category_name']; ?></td> -->
                     <td>
                         <a href="index.php?controller=news&action=edit&id=<?= $news['id']; ?>">Sửa</a>
-                        <a href="index.php?controller=news&action=delete&id=<? $news['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
+                    </td>
+                    <td>
+                        <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+                            <input type="hidden" name="id" value="<?= $news['id'] ?>">
+                            <button type="submit" name="delete">Delete</button>
+                        </form>
                     </td>
                 </tr>
-            <?php endforeach; ?>
+            <?php $i++;
+            endforeach; ?>
         </tbody>
     </table>
 

@@ -1,15 +1,18 @@
 <?php
 
-require_once APP_ROOT."/servers/newsServer.php";
+require_once APP_ROOT . "/servers/newsServer.php";
 
-class NewsController {
-    public function index() {
+class NewsController
+{
+    public function index()
+    {
         $newsModel = new newsServer();
         $newsList = $newsModel->getAllNews();
         include "views/admin/news/index.php";
     }
 
-    public function detail() {
+    public function detail()
+    {
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         if ($id) {
             $newsModel = new newsServer();
@@ -20,11 +23,12 @@ class NewsController {
         }
     }
 
-    public function add() {
+    public function add()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = $_POST['title'];
             $content = $_POST['content'];
-            $image = $_POST['image']; 
+            $image = $_POST['image'];
             $category_id = $_POST['category_id'];
 
             $newsModel = new newsServer();
@@ -37,7 +41,8 @@ class NewsController {
         include "views/admin/news/add.php";
     }
 
-    public function edit() {
+    public function edit()
+    {
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         if ($id) {
             $newsModel = new newsServer();
@@ -47,7 +52,7 @@ class NewsController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = $_POST['title'];
             $content = $_POST['content'];
-            $image = $_POST['image']; 
+            $image = $_POST['image'];
             $idNews = $_POST['id'];
 
             $newsModel->updateNews($title, $content, $image, $idNews);
@@ -59,15 +64,16 @@ class NewsController {
         include "views/admin/news/edit.php";
     }
 
-    public function delete() {
-        $id = isset($_GET['id']) ? $_GET['id'] : null;
+    public function delete()
+    {
+        $id = isset($_GET['id']) ? intval($_GET['id']) : null;
         if ($id) {
             $newsModel = new newsServer();
             $newsModel->deleteNews($id);
-            header("Location: index.php");
+            header("Location: " . APP_ROOT . "views/admin/news/index.php"); 
+            exit;
         } else {
             echo "Bài viết không tồn tại.";
         }
     }
 }
-?>
