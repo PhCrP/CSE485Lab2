@@ -36,7 +36,7 @@
                     <td><?php echo $news['title']; ?></td>
                     <!-- <td><?php echo $news['category_name']; ?></td> -->
                     <td>
-                        <a href="index.php?controller=news&action=edit&id=<?php echo $news['id']; ?>">Sửa</a>
+                        <a href="index.php?controller=news&action=&id=<?php echo $news['id']; ?>">Sửa</a>
                         <a href="index.php?controller=news&action=delete&id=<?php echo $news['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
                     </td>
                 </tr>
