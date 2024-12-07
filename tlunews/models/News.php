@@ -1,39 +1,76 @@
 <?php
-class News {
-    private $db;
+class News
+{
+    private $id;
 
-    public function __construct() {
-        $this->db = new mysqli("mysql", "root", "123456789", "tintuc");
+    private $title;
+    private $content;
+    private $image;
+    private $created_at;
+    private $category_id;
+
+    public function __construct($id, $title, $content, $image, $created_at, $category_id)
+    {
+        $this->id = $id;
+        $this->title = $title;
+        $this->content = $content;
+        $this->image = $image;
+        $this->created_at = $created_at;
+        $this->category_id = $category_id;
     }
 
-    public function getAllNews() {
-        $result = $this->db->query("SELECT * FROM news;");
-        return $result->fetch_all(MYSQLI_ASSOC);
+    public function getId()
+    {
+        return $this->id;
     }
 
-    public function getNewsById($id) {
-        $stmt = $this->db->prepare("SELECT * FROM news WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+    public function getTitle()
+    {
+        return $this->title;
     }
 
-    public function createNews($title, $content, $image, $category_id) {
-        $stmt = $this->db->prepare("INSERT INTO news (title, content, image, category_id) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("sssi", $title, $content, $image, $category_id);
-        return $stmt->execute();
+    public function getContent()
+    {
+        return $this->content;
     }
 
-    public function updateNews($id, $title, $content, $image, $category_id) {
-        $stmt = $this->db->prepare("UPDATE news SET title = ?, content = ?, image = ?, category_id = ? WHERE id = ?");
-        $stmt->bind_param("sssii", $title, $content, $image, $category_id, $id);
-        return $stmt->execute();
+    public function getImage()
+    {
+        return $this->image;
     }
 
-    public function deleteNews($id) {
-        $stmt = $this->db->prepare("DELETE FROM news WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        return $stmt->execute();
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    public function getCategoryId()
+    {
+        return $this->category_id;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    public function setCreated_at($created_at)
+    {
+        $this->created_at = $created_at;
+    }
+
+    public function setCategoryId($category_id)
+    {
+        $this->category_id = $category_id;
     }
 }
-?>

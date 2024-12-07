@@ -1,8 +1,11 @@
 <?php
-include "./models/News.php";
-$newsModel = new News();
-$newsList = $newsModel->getAllNews();
+
+    require_once APP_ROOT."/servers/newsServer.php";
+    $new = new newsServer();
+    $newsList = $new->getAllNews();
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,11 +19,11 @@ $newsList = $newsModel->getAllNews();
 <body>
 
     <h1>Danh sách tin tức</h1>
-    <a href="../news/add.php">Thêm mới tin tức</a>
+    <a href="<?= DOMAIN."views/admin/news/add.php" ?>">Thêm mới tin tức</a>
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>Tiêu đề</th>
                 <th>Chuyên mục</th>
                 <th>Hành động</th>
@@ -29,11 +32,11 @@ $newsList = $newsModel->getAllNews();
         <tbody>
             <?php foreach ($newsList as $news): ?>
                 <tr>
-                    <td><?php echo $news['id']; ?></td>
+                    <!-- <td><?php echo $news['id']; ?></td> -->
                     <td><?php echo $news['title']; ?></td>
                     <!-- <td><?php echo $news['category_name']; ?></td> -->
                     <td>
-                        <a href="index.php?controller=news&action=edit&id=<?php echo $news['id']; ?>">Sửa</a>
+                        <a href="index.php?controller=news&action=&id=<?php echo $news['id']; ?>">Sửa</a>
                         <a href="index.php?controller=news&action=delete&id=<?php echo $news['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
                     </td>
                 </tr>

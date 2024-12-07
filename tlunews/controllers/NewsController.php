@@ -1,15 +1,21 @@
 <?php
-class NewsController {
-    public function index() {
-        $newsModel = new News();
+
+require_once APP_ROOT . "/servers/newsServer.php";
+
+class NewsController
+{
+    public function index()
+    {
+        $newsModel = new newsServer();
         $newsList = $newsModel->getAllNews();
         include "views/admin/news/index.php";
     }
 
-    public function detail() {
-        $id = isset($_GET['id']) ? $_GET['id'] : null;
+    public function detail()
+    {
+        $id = isset($_POST['id']) ? $_POST['id'] : null;
         if ($id) {
-            $newsModel = new News();
+            $newsModel = new newsServer();
             $news = $newsModel->getNewsById($id);
             include "views/news/detail.php";
         } else {
@@ -17,16 +23,18 @@ class NewsController {
         }
     }
 
-    public function add() {
+    public function add()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = $_POST['title'];
             $content = $_POST['content'];
-            $image = $_POST['image']; 
+            $image = $_POST['image'];
             $category_id = $_POST['category_id'];
 
-            $newsModel = new News();
+            $newsModel = new newsServer();
             $newsModel->createNews($title, $content, $image, $category_id);
-            header("Location: index.php");
+            header("Location: " . DOMAIN); 
+            exit;
         }
 
         $categoryModel = new Category();
@@ -34,37 +42,33 @@ class NewsController {
         include "views/admin/news/add.php";
     }
 
-    public function edit() {
-        $id = isset($_GET['id']) ? $_GET['id'] : null;
+    public function update()
+    {
+        $id = isset($_POST['id']) ? $_POST['id'] : null;
         if ($id) {
-            $newsModel = new News();
-            $news = $newsModel->getNewsById($id);
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $newsModel = new newsServer();
+            
             $title = $_POST['title'];
             $content = $_POST['content'];
-            $image = $_POST['image']; 
-            $category_id = $_POST['category_id'];
+            $image = $_POST['image'];
+            $idNews = $_POST['id'];
 
-            $newsModel->updateNews($id, $title, $content, $image, $category_id);
-            header("Location: index.php");
+            $newsModel->updateNews($title, $content, $image, $idNews);
+            header("Location: " . DOMAIN); 
+            exit;
         }
-
-        $categoryModel = new Category();
-        $categories = $categoryModel->getAllCategories();
-        include "views/admin/news/edit.php";
     }
 
-    public function delete() {
-        $id = isset($_GET['id']) ? $_GET['id'] : null;
+    public function delete()
+    {
+        $id = isset($_POST['id']) ? intval($_POST['id']) : null;
         if ($id) {
-            $newsModel = new News();
+            $newsModel = new newsServer();
             $newsModel->deleteNews($id);
-            header("Location: index.php");
+            header("Location: " . DOMAIN); 
+            exit;
         } else {
             echo "Bài viết không tồn tại.";
         }
     }
 }
-?>
