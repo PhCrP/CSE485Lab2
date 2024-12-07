@@ -1,5 +1,6 @@
 <?php
     define("APP_ROOT",dirname(__FILE__, 2));
+    define("APP_ROOTS",dirname(__FILE__, 4));
     define("DOMAIN","http://localhost:8080/");
 
     define("host","mysql");

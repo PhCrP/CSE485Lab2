@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td><?= $news['content']; ?></td>
                     <td><img class="imgs" src="<?= DOMAIN . "asset/image/" . $news['image']; ?>" alt="<?= $news['image']; ?>"></img></td>
                     <td>
-                        <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+                        <form action="<?= DOMAIN."views/admin/news/update.php" ?>" method="GET">
                             <input type="hidden" name="id" value="<?= $news['id'] ?>">
                             <button type="submit" name="update">Update</button>
                         </form>

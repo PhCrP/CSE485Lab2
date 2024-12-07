@@ -29,7 +29,31 @@ class newsServer
         }
     }
 
-    public function getNewsById($id) {}
+    public function getNewsById($id)
+    {
+        // Kết nối cơ sở dữ liệu
+        $DB_con = new DBConnection();
+        
+        $sql = "SELECT * FROM news WHERE id = :id";
+
+        try {
+            $conn = $DB_con->getCon();
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            $news = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($news) {
+                return $news;
+            } else {
+                return null; // Trả về null nếu không tìm thấy tin tức
+            }
+        } catch (PDOException $e) {
+            echo "Lỗi khi lấy tin tức: " . $e->getMessage();
+            return null;
+        }
+    }
+
 
     public function createNews($title, $content, $image)
     { {
@@ -96,7 +120,7 @@ class newsServer
 
         try {
             $con = $DB_con->getCon();
-            $st = $con->prepare ($sqlIst);
+            $st = $con->prepare($sqlIst);
             $st->bindParam(":idNews", $idNews, PDO::PARAM_INT);
             $st->execute();
         } catch (PDOException $e) {
