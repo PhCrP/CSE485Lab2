@@ -1,3 +1,5 @@
+<!-- tlunews/views/news/detail.php -->
+
 <!DOCTYPE html>
 <html lang="en">
 

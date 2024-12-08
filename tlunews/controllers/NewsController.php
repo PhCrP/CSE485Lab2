@@ -1,6 +1,8 @@
 <?php
 
-require_once APP_ROOT . "/servers/newsServer.php";
+namespace App\controllers;
+
+use App\servers\newsServer;
 
 class NewsController
 {
@@ -23,24 +25,24 @@ class NewsController
         }
     }
 
-    public function add()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $title = $_POST['title'];
-            $content = $_POST['content'];
-            $image = $_POST['image'];
-            $category_id = $_POST['category_id'];
+    // public function add()
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //         $title = $_POST['title'];
+    //         $content = $_POST['content'];
+    //         $image = $_POST['image'];
+    //         $category_id = $_POST['category_id'];
 
-            $newsModel = new newsServer();
-            $newsModel->createNews($title, $content, $image, $category_id);
-            header("Location: " . DOMAIN); 
-            exit;
-        }
+    //         $newsModel = new newsServer();
+    //         $newsModel->createNews($title, $content, $image, $category_id);
+    //         header("Location: " . DOMAIN); 
+    //         exit;
+    //     }
 
-        $categoryModel = new Category();
-        $categories = $categoryModel->getAllCategories();
-        include "views/admin/news/add.php";
-    }
+    //     $categoryModel = new Category();
+    //     $categories = $categoryModel->getAllCategories();
+    //     include "views/admin/news/add.php";
+    // }
 
     public function update()
     {

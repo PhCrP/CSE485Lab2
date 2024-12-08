@@ -1,15 +1,13 @@
 <?php
-define("APP_ROOT", dirname(__FILE__, 4));
-define("DOMAIN", "http://localhost:8080/");
+namespace App\views\admin\news;
 
-define("host", "mysql");
-define("user", "root");
-define("pass", "123456789");
-define("daba", "tintuc");
-define("port", 3306);
+// // views/admin/news/update.php
+// require_once dirname(__DIR__, 3) . "/config/config.php";
+// require_once dirname(__DIR__, 3) . "/vendor/autoload.php";
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
-require_once APP_ROOT . "/servers/newsServer.php";
-require_once APP_ROOT . "/controllers/NewsController.php";
+use App\servers\newsServer;
+use App\controllers\NewsController;
 
 $newsController = new NewsController();
 $newsServer = new newsServer();

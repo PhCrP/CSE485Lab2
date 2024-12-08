@@ -1,11 +1,14 @@
 <?php
 
-require_once APP_ROOT."/servers/newsServer.php";
+namespace App\controllers;
 
-class HomeController{
+use App\servers\newsServer;
 
-    public function index(){
-        include APP_ROOT."/views/home/index.php";
+class HomeController
+{
+
+    public function index()
+    {
+        include APP_ROOT . "/views/home/index.php";
     }
-
 }
