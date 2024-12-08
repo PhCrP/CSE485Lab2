@@ -1,6 +1,10 @@
 <?php
 
-require_once(APP_ROOT . "/libs/DBConnection.php");
+namespace App\servers;
+
+use PDO;
+use PDOException;
+use App\libs\DBConnection;
 
 class newsServer
 {
@@ -33,7 +37,7 @@ class newsServer
     {
         // Kết nối cơ sở dữ liệu
         $DB_con = new DBConnection();
-        
+
         $sql = "SELECT * FROM news WHERE id = :id";
 
         try {
@@ -84,30 +88,29 @@ class newsServer
     }
 
     public function updateNews($title, $content, $image, $idNews)
-    { {
-            $sqlUp = "UPDATE news SET title = :title, content = :content, image = :image WHERE id = :idNews;";
-            $DB_con = new DBConnection();
-            $st = null;
+    {
+        $sqlUp = "UPDATE news SET title = :title, content = :content, image = :image WHERE id = :idNews;";
+        $DB_con = new DBConnection();
+        $st = null;
 
+        try {
+            $con = $DB_con->getCon();
+            $st = $con->prepare($sqlUp);
+            $st->bindParam(":title", $title);
+            $st->bindParam(":content", $content);
+            $st->bindParam(":image", $image);
+            $st->bindParam(":idNews", $idNews, PDO::PARAM_INT);
+            $st->execute();
+
+            // echo "Update thành công!";
+        } catch (PDOException $e) {
+            echo "Lỗi: " . $e->getMessage() . "<br>";
+        } finally {
             try {
-                $con = $DB_con->getCon();
-                $st = $con->prepare($sqlUp);
-                $st->bindParam(":title", $title);
-                $st->bindParam(":content", $content);
-                $st->bindParam(":image", $image);
-                $st->bindParam(":idNews", $idNews, PDO::PARAM_INT);
-                $st->execute();
-
-                echo "Update thành công!";
+                $con = null;
+                $st = null;
             } catch (PDOException $e) {
                 echo "Lỗi: " . $e->getMessage() . "<br>";
-            } finally {
-                try {
-                    $con = null;
-                    $st = null;
-                } catch (PDOException $e) {
-                    echo "Lỗi: " . $e->getMessage() . "<br>";
-                }
             }
         }
     }

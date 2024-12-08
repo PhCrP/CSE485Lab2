@@ -20,7 +20,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer --version
 
 # Copy mã nguồn vào thư mục mặc định của Apache
-COPY ./src /var/www/html
+# COPY ./src /var/www/html
 
 # Cấp quyền truy cập cho thư mục ứng dụng
 RUN chown -R www-data:www-data /var/www/html \

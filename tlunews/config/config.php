@@ -1,12 +1,10 @@
 <?php
-    define("APP_ROOT",dirname(__FILE__, 2));
-    define("APP_ROOTS",dirname(__FILE__, 4));
-    define("DOMAIN","http://localhost:8080/");
 
-    define("host","mysql");
-    define("user","root");
-    define("pass","123456789");
-    define("daba","tintuc");
-    define("port", 3306);
+define("APP_ROOT", dirname(__DIR__));
+define("DOMAIN", "http://localhost:8080/");
 
-?>
+define("host", "mysql");
+define("user", "root");
+define("pass", "123456789");
+define("daba", "tintuc");
+define("port", 3306);
