@@ -33,6 +33,31 @@ class newsServer
         }
     }
 
+    public function getAllNewsCate()
+    {
+        $sqlAllNewsCate = "SELECT n.id, title, content, name, image FROM news n INNER JOIN categories c WHERE n.category_id = c.id;";
+        $DB_con = new DBConnection();
+        $st = null;
+
+        try {
+            $con = $DB_con->getCon();
+            $st = $con->prepare($sqlAllNewsCate);
+            $st->execute();
+
+            $rs = $st->fetchAll(PDO::FETCH_ASSOC);
+            return $rs;
+        } catch (PDOException $e) {
+            echo "Lỗi: " . $e->getMessage() . "<br>";
+        } finally {
+            try {
+                $con = null;
+                $st = null;
+            } catch (PDOException $e) {
+                echo "Lỗi: " . $e->getMessage() . "<br>";
+            }
+        }
+    }
+
     public function getNewsById($id)
     {
         // Kết nối cơ sở dữ liệu
@@ -59,50 +84,53 @@ class newsServer
     }
 
 
-    public function createNews($title, $content, $image)
-    { {
-            $sqlIst = "INSERT INTO news(title, content, image) VALUES (:title, :content, :image);";
-            $DB_con = new DBConnection();
-            $st = null;
-
+    public function createNews($title, $content, $images, $categoryId)
+    {
+        $sqlInsert = "INSERT INTO news (title, content, image, category_id) 
+                      VALUES (:title, :content, :images, :categoryId)";
+        $DB_con = new DBConnection();
+        $st = null;
+    
+        try {
+            $con = $DB_con->getCon();
+            $st = $con->prepare($sqlInsert);
+    
+            $st->bindParam(":title", $title, PDO::PARAM_STR);
+            $st->bindParam(":content", $content, PDO::PARAM_STR);
+            $st->bindParam(":images", $images, PDO::PARAM_STR);
+            $st->bindParam(":categoryId", $categoryId, PDO::PARAM_INT);
+    
+            $st->execute();
+        } catch (PDOException $e) {
+            echo "Lỗi khi thêm tin tức: " . $e->getMessage() . "<br>";
+        } finally {
             try {
-                $con = $DB_con->getCon();
-                $st = $con->prepare($sqlIst);
-                $st->bindParam(":title", $title);
-                $st->bindParam(":content", $content);
-                $st->bindParam(":image", $image);
-                $st->execute();
-
-                echo "Thêm thành công!";
+                $con = null;
+                $st = null;
             } catch (PDOException $e) {
-                echo "Lỗi: " . $e->getMessage() . "<br>";
-            } finally {
-                try {
-                    $con = null;
-                    $st = null;
-                } catch (PDOException $e) {
-                    echo "Lỗi: " . $e->getMessage() . "<br>";
-                }
+                echo "Lỗi khi đóng kết nối: " . $e->getMessage() . "<br>";
             }
         }
     }
+    
 
-    public function updateNews($title, $content, $image, $idNews)
+    public function updateNews($idNews, $title, $content, $image, $idCate)
     {
-        $sqlUp = "UPDATE news SET title = :title, content = :content, image = :image WHERE id = :idNews;";
+        $sqlUp = "UPDATE news n SET title = :title, content = :content, category_id = :idCate, image = :image WHERE n.id = :idNews;";
         $DB_con = new DBConnection();
         $st = null;
 
         try {
             $con = $DB_con->getCon();
             $st = $con->prepare($sqlUp);
-            $st->bindParam(":title", $title);
-            $st->bindParam(":content", $content);
-            $st->bindParam(":image", $image);
+            $st->bindParam(":title", $title, PDO::PARAM_STR);
             $st->bindParam(":idNews", $idNews, PDO::PARAM_INT);
+            $st->bindParam(":content", $content, PDO::PARAM_STR);
+            $st->bindParam(":idCate", $idCate, PDO::PARAM_INT);
+            $st->bindParam(":image", $image, PDO::PARAM_STR);
+            
             $st->execute();
 
-            // echo "Update thành công!";
         } catch (PDOException $e) {
             echo "Lỗi: " . $e->getMessage() . "<br>";
         } finally {

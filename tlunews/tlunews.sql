@@ -71,4 +71,11 @@ SELECT * FROM users;
 SELECT * FROM categories;
 SELECT * FROM news;
 
+SELECT title, content, name, image FROM news n INNER JOIN categories c WHERE n.category_id = c.id;
+
+UPDATE news n SET title = 'title', content = 'content', category_id = 4, image = 'image1.jpg' WHERE n.id = 26;
+       
+
 DROP TABLE news;
+DROP TABLE users;
+

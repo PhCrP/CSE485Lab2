@@ -6,7 +6,7 @@ use App\servers\newsServer;
 use App\controllers\NewsController;
 
 $new = new newsServer();
-$newsList = $new->getAllNews();
+$newsList = $new->getAllNewsCate();
 
 $newsController = new NewsController();
 
@@ -40,14 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <h1>Danh sách tin tức</h1>
-    <a href="<?= DOMAIN . "views/admin/news/add.php" ?>">Thêm mới tin tức</a>
+    <h1>List News</h1>
+    <a href="<?= DOMAIN . "views/admin/news/add.php" ?>">Add News</a>
     <table>
         <thead>
             <tr>
                 <th>STT</th>
                 <th>Title</th>
                 <th>Content</th>
+                <th>Category</th>
                 <th>Image</th>
                 <th>Update</th>
                 <th>Delete</th>
@@ -60,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td><?= $i; ?></td>
                     <td><?= $news['title']; ?></td>
                     <td><?= $news['content']; ?></td>
+                    <td><?= $news['name']; ?></td>
                     <td><img class="imgs" src="<?= DOMAIN . "asset/image/" . $news['image']; ?>" alt="<?= $news['image']; ?>"></img></td>
                     <td>
                         <form action="<?= DOMAIN."views/admin/news/update.php" ?>" method="GET">

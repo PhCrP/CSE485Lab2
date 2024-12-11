@@ -1,11 +1,11 @@
 <?php
+
 namespace App\views\admin\news;
 
-// // views/admin/news/update.php
-// require_once dirname(__DIR__, 3) . "/config/config.php";
-// require_once dirname(__DIR__, 3) . "/vendor/autoload.php";
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
+use PDO;
+use App\libs\DBConnection;
 use App\servers\newsServer;
 use App\controllers\NewsController;
 
@@ -23,17 +23,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     $id = $_POST['id'];
     $title = $_POST['title'];
     $content = $_POST['content'];
-    $image = $_FILES['image']['name'];
+    $categoryId = isset($_POST['category_id']) ? (int)$_POST['category_id'] : null;
 
-    if (!empty($image)) {
-        $targetDir = APP_ROOT . "/asset/image/";
-        $targetFile = $targetDir . basename($image);
-        move_uploaded_file($_FILES['image']['tmp_name'], $targetFile); // Upload file ảnh mới
-    } else {
-        $image = $_POST['old_image']; // Giữ nguyên ảnh cũ nếu không chọn ảnh mới
+    if ($categoryId === null || $categoryId <= 0) {
+        echo "Vui lòng chọn danh mục hợp lệ.";
+        exit;
     }
 
-    $newsController->update($title, $content, $image, $id); // Hàm xử lý cập nhật tin tức
+    // Kiểm tra nếu có ảnh được tải lên
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = __DIR__ . "/../../../asset/image/";
+        $imageName = basename($_FILES['image']['name']);
+        $imagePath = $uploadDir . $imageName;
+
+        // Di chuyển file tải lên vào thư mục đích
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
+            $image = $imageName; // Cập nhật tên ảnh mới
+        } else {
+            echo "Lỗi khi tải lên ảnh.";
+            exit;
+        }
+    } else {
+        $image = $_POST['old_image']; // Sử dụng ảnh cũ nếu không tải lên ảnh mới
+    }
+
+    $newsServer->updateNews($id, $title, $content, $image, $categoryId); // Hàm xử lý cập nhật tin tức
     header("Location: " . DOMAIN); // Quay lại danh sách tin tức
     exit;
 } else {
@@ -50,6 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cập nhật tin tức</title>
     <link rel="stylesheet" href="<?= DOMAIN . "asset/style/main.css"; ?>">
+    <script src="<?= DOMAIN . "asset/js/bootstrap.bundle.min.js"; ?>"></script>
+    <style>
+        img {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -64,13 +86,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
         <label for="content">Nội dung:</label>
         <textarea id="content" name="content" required><?= htmlspecialchars($news['content']) ?></textarea><br>
 
+        <label for="category_id">Category:</label>
+        <select name="category_id" id="category_id" required>
+            <?php
+            $dbCon = new DBConnection();
+            $conn = $dbCon->getCon();
+            $stmt = $conn->query("SELECT id, name FROM categories");
+            $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($categories as $category) {
+                echo "<option value='{$category['id']}'>{$category['name']}</option>";
+            }
+            ?>
+        </select>
+
         <label for="image">Hình ảnh:</label>
-        <input type="file" id="image" name="image"><br>
-        <p>Ảnh hiện tại: <img src="<?= DOMAIN . "asset/image/" . $news['image']; ?>" alt="<?= $news['image']; ?>" width="100"></p>
+        <input type="file" id="image" name="image" accept="asset/image/*" onchange="previewImage(event)"><br>
+
+        <p>Ảnh hiện tại:</p>
+        <img id="preview" src="<?= DOMAIN . "asset/image/" . $news['image']; ?>" alt="Preview" width="100"><br>
+
+
 
         <button type="submit">Cập nhật</button>
     </form>
     <a href="<?= DOMAIN ?>">Quay lại danh sách</a>
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview');
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result; // Cập nhật src ảnh xem trước
+                };
+
+                reader.readAsDataURL(file); // Đọc file ảnh và chuyển đổi thành URL
+            } else {
+                preview.src = "<?= DOMAIN . 'asset/image/' . $news['image']; ?>"; // Quay về ảnh cũ nếu không chọn
+            }
+        }
+    </script>
+
 </body>
 
 </html>
